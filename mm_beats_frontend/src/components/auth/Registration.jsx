@@ -3,7 +3,7 @@ import authAPI from "../../adapters/authAPI";
 
 export default class Registration extends Component {
   constructor(props) {
-    super()
+    super(props)
     this.state = {
       first_name: "",
       last_name: "",
@@ -37,8 +37,16 @@ export default class Registration extends Component {
       password_confirmation,
       experience: 0,
       bio: ""
-    });
-    e.preventDefault();
+    }).then(resp => {
+      if (resp.data.status === "created") {
+        this.props.authRedirect(resp.data);
+      }
+    }).catch(error => {
+      // TODO set state with error
+      console.log(error)
+    })
+
+    e.preventDefault()
   }
 
   handleChange = e => {

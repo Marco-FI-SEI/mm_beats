@@ -1,5 +1,5 @@
 import { SERVER_STATUS_MESSAGES } from "../config/constants"
-import ServerError from "../config/errors"
+import { errorHandler } from "../config/errors/errorHandler"
 
 // allows API to set cookie in client
 const cookiePermission = { withCredentials: true }
@@ -7,6 +7,7 @@ const cookiePermission = { withCredentials: true }
 async function makeRequest(method, url, body = "") {
   let result
   const config = buildConfig(method, body)
+
   try {
     result = await fetch(url, config, cookiePermission)
     result = result.json()
@@ -31,21 +32,21 @@ const buildConfig = (method, body = "") => {
 }
 
 const handleRejection = e => {
-  if (SERVER_STATUS_MESSAGES.includes(e.message)) {
-    return throwServerError(e)
+  if (Object.values(SERVER_STATUS_MESSAGES).includes(e.message)) {
+    return throwError(e)
   } else {
     return e.json()
   }
 }
 
-const throwServerError = e => {
-  throw new ServerError(e)
+const throwError = e => {
+  return errorHandler(e)
 }
 
 const API = {
   makeRequest,
   handleRejection,
-  throwServerError
+  throwError
 }
 
 export default API
