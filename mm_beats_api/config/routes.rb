@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       get :logged_in, to: "sessions#logged_in"
 
       resources :registrations, only: [:create]
+      resources :headphones
     end
   end
 end

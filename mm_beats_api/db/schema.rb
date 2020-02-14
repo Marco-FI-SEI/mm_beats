@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_193316) do
+ActiveRecord::Schema.define(version: 2020_02_14_140813) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "headphones", force: :cascade do |t|
+    t.string "model"
+    t.string "manufacturer"
+    t.string "body_type"
+    t.string "driver_type"
+    t.string "release_year"
+    t.integer "star_rating"
+    t.string "price"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["model", "manufacturer"], name: "index_headphones_on_model_and_manufacturer", unique: true
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "first_name"
@@ -27,5 +40,4 @@ ActiveRecord::Schema.define(version: 2020_02_11_193316) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
-
 end

@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  model: MyString
+  manufacturer: MyString
+  body_type: MyString
+  driver_type: MyString
+  release_year: MyString
+  star_rating: 1
+  price: MyString
+
+two:
+  model: MyString
+  manufacturer: MyString
+  body_type: MyString
+  driver_type: MyString
+  release_year: MyString
+  star_rating: 1
+  price: MyString
