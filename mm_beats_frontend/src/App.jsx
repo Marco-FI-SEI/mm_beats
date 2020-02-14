@@ -1,52 +1,59 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Route, Switch, NavLink } from "react-router-dom";
+import { connect } from "react-redux";
+import { userIsAuthenticated, userIsNotAuthenticated } from "./components/auth/authentication";
+import { logout} from "../actions/user";
+
 import HomePage from "./components/pages/HomePage";
-import Dashboard from "./components/pages/Dashboard";
+import DashboardPage from "./components/pages/DashboardPage";
+import LoginForm from "./components/auth/LoginForm";
+import RegistrationForm from "./components/auth/RegistrationForm";
 
-export default class App extends Component {
-  constructor() {
-    super()
+// Define higher order components
+const Login = userIsNotAuthenticated(LoginForm)
+const Register = userIsNotAuthenticated(RegistrationForm)
+const Dashboard = userIsAuthenticated(DashboardPage)
 
-    this.state = {
-      isLoggedIn: "false",
-      user: {}
-    }
-  }
-
-  handleLogin = data => {
-    this.setState({
-      isLoggedIn: "true",
-      user: data.user
-    })
-  }
-
-  render() {
-    return (
-      <Router>
-        <Switch>
-          <Route
-            exact
-            path={"/"}
-            render={props => (
-              <HomePage
-                {...props}
-                isLoggedIn={this.state.isLoggedIn}
-                handleLogin={this.handleLogin}
-              />
-            )}
-          />
-          <Route
-            exact
-            path={"/dashboard"}
-            render={props => (
-              <Dashboard
-                {...props}
-                isLoggedIn={this.state.isLoggedIn}
-              />
-            )}
-          />
-        </Switch>
-      </Router>
-    )
+// Define Auth nav items
+const getUserName = user => {
+  if (user.data) {
+    return `Hi! ${user.data.first_name}`
   }
 }
+
+const Username = ({ user }) => {
+  return <div>{ getUserName(user) }</div>
+}
+
+const LoginLink = userIsNotAuthenticated(() => {
+  return <NavLink to="/login">Login</NavLink>
+})
+
+const LogoutLink = userIsAuthenticated(({ logout }) => {
+  return <button onClick={ () => logout() }>Logout</button>
+})
+
+const App = ({ user, logout }) => {
+  return (
+    <Router>
+      <nav>
+        <NavLink to="/">Home</NavLink>
+      </nav>
+      <nav>
+        <LoginLink />
+        <LogoutLink logout={logout} />
+        <Username user={user} />
+      </nav>
+      <Switch>
+        <Route exact path={"/"} component={HomePage} />
+        <Route path={"/dashboard"} component={Dashboard} />
+        <Route path={"/login"} component={Login} />
+        <Route path={"/register"} component={Register} />
+      </Switch>
+    </Router>
+  );
+}
+
+const mapStateToProps = state => ({ user: state.user })
+
+export default connect(mapStateToProps, { logout }(App))

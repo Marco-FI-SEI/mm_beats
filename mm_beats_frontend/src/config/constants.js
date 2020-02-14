@@ -12,3 +12,16 @@ export const SERVER_STATUS_MESSAGES = {
   422: ":unprocessable_entity",
   500: ":internal_server_error"
 }
+
+/* AUTH */
+export const AUTH_FORMS = {
+  LOGIN: "login",
+  REGISTER: "register"
+}
+
+export const AUTH_ACTION_TYPES = {
+  USER_LOGGING_IN: "USER_LOGGING_IN",
+  USER_LOGGED_IN: "USER_LOGGED_IN",
+  USER_LOGGED_OUT: "USER_LOGGED_OUT",
+  USER_REGISTERED: "USER_REGISTERED",
+}
