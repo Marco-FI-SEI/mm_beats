@@ -1,43 +1,40 @@
 import React, { Component } from "react";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { reduxForm, Field } from "redux-form";
+import { InputField as input } from "../InputField";
+import * as actions from "../../actions/userActions";
+
 
 class LoginForm extends Component {
-    constructor(props) {
-    super(props)
-    this.state = {
-      email: "",
-      password: "",
-    }
-  }
-
-  handleChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    })
-  }
-
-  handleSubmit = e => {
-    e.preventDefault()
-    this.props.authenticator(e, "login", this.state);
-  }
+  onSubmit = formValues => {
+    this.props.login(formValues);
+  };
 
   render() {
+    const { handleSubmit } = this.props;
+
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <input onChange={this.handleChange}
-                 type="email"
-                 value={this.state.email}
-                 placeholder="Email" />
-          <input onChange={this.handleChange}
-                 type="password"
-                 value={this.state.password}
-                 placeholder="Password" />
-          <input type="submit"
-                 value="Enter" />
-        </form>
-      </div>
-    )
+      <form onSubmit={handleSubmit(this.onSubmit)}>
+        <div>
+          <Field name="email" component={input} label="Email" />
+        </div>
+        <div>
+          <Field
+            name="password"
+            component={input}
+            label="Password"
+          />
+        </div>
+        <div>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+    );
   }
 }
 
-export default LoginForm
+export default compose(
+  connect(null, actions),
+  reduxForm({ form: "login" })
+)(LoginForm);

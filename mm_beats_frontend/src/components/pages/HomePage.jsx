@@ -7,6 +7,6 @@ export default class HomePage extends Component {
       <div>
         <AuthFormsContainer />
       </div>
-    )
-  }
-}
+    );
+  };
+};

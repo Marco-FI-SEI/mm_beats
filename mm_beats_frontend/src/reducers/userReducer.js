@@ -1,4 +1,4 @@
-import { AUTH_ACTION_TYPES as authTypes } from "../constants";
+import { AUTH_ACTION_TYPES as authTypes } from "../config/constants";
 
 const initialState = {
   data: null,
@@ -28,5 +28,5 @@ export default function userUpdate(state = initialState, { type, payload }) {
       };
     default:
       return state;
-  }
-}
+  };
+};

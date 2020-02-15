@@ -1,17 +1,19 @@
-import { connectedRouterRedirect } from "redux-auth-wrapper/history4/redirect";
+import { connectedReduxRedirect } from "redux-auth-wrapper/history4/redirect";
+import { replace } from "connected-react-router"
 import locationHelperBuilder from "redux-auth-wrapper/history4/locationHelper";
 
 const locationHelper = locationHelperBuilder({});
 
-export const userIsAuthenticated = connectedRouterRedirect({
+export const userIsAuthenticated = connectedReduxRedirect({
   // url to redirect user if unsuccessful
   redirectPath: "/login",
   // check if user is authenticated
   authenticatedSelector: state => state.user.data !== null,
-  wrapperDisplayName: "UserIsAuthenticated"
+  wrapperDisplayName: "UserIsAuthenticated",
+  redirectAction: replace
 });
 
-export const userIsNotAuthenticated = connectedRouterRedirect({
+export const userIsNotAuthenticated = connectedReduxRedirect({
   // if logged in or no query param send to home page
   redirectPath: (state, ownProps) =>
     locationHelper.getRedirectQueryParam(ownProps) || "/",
@@ -19,5 +21,6 @@ export const userIsNotAuthenticated = connectedRouterRedirect({
   allowRedirectBack: false,
   // check if user is authenticated
   authenticatedSelector: state => state.user.data === null,
-  wrapperDisplayName: "UserIsNotAuthenticated"
+  wrapperDisplayName: "UserIsNotAuthenticated",
+  redirectAction: replace
 });

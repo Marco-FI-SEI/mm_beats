@@ -1,59 +1,80 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch, NavLink } from "react-router-dom";
+import {
+  withRouter,
+  Route,
+  Switch,
+  NavLink
+} from "react-router-dom";
 import { connect } from "react-redux";
-import { userIsAuthenticated, userIsNotAuthenticated } from "./components/auth/authentication";
-import { logout} from "../actions/user";
+import {
+  userIsAuthenticated,
+  userIsNotAuthenticated
+} from "./components/auth/authentication";
+import { logout } from "./actions/userActions";
 
 import HomePage from "./components/pages/HomePage";
-import DashboardPage from "./components/pages/DashboardPage";
+// import DashboardPage from "./components/pages/DashboardPage";
 import LoginForm from "./components/auth/LoginForm";
 import RegistrationForm from "./components/auth/RegistrationForm";
 
 // Define higher order components
-const Login = userIsNotAuthenticated(LoginForm)
-const Register = userIsNotAuthenticated(RegistrationForm)
-const Dashboard = userIsAuthenticated(DashboardPage)
+const Login = withRouter(userIsNotAuthenticated(LoginForm));
+const Register = withRouter(userIsNotAuthenticated(RegistrationForm));
+// const Dashboard = userIsAuthenticated(DashboardPage);
 
 // Define Auth nav items
 const getUserName = user => {
   if (user.data) {
-    return `Hi! ${user.data.first_name}`
+    return `Hi! ${user.data.first_name}`;
   }
-}
+};
 
 const Username = ({ user }) => {
-  return <div>{ getUserName(user) }</div>
-}
+  return <div>{getUserName(user)}</div>;
+};
 
-const LoginLink = userIsNotAuthenticated(() => {
-  return <NavLink to="/login">Login</NavLink>
-})
+const LoginLink = withRouter(
+  userIsNotAuthenticated(() => {
+    return <NavLink to="/login">Login</NavLink>;
+  })
+);
 
-const LogoutLink = userIsAuthenticated(({ logout }) => {
-  return <button onClick={ () => logout() }>Logout</button>
-})
+const RegisterLink = withRouter(
+  userIsNotAuthenticated(() => {
+    return <NavLink to="/register">Register</NavLink>;
+  })
+);
+
+// const LoginLink = wrapWithRouter(<NavLink to="/login">Login</NavLink>);
+
+const LogoutLink = withRouter(
+  userIsAuthenticated(({ logout }) => {
+    return <button onClick={() => logout()}>Logout</button>;
+  })
+);
 
 const App = ({ user, logout }) => {
   return (
-    <Router>
+    <div>
       <nav>
         <NavLink to="/">Home</NavLink>
       </nav>
       <nav>
         <LoginLink />
+        <RegisterLink />
         <LogoutLink logout={logout} />
         <Username user={user} />
       </nav>
       <Switch>
-        <Route exact path={"/"} component={HomePage} />
-        <Route path={"/dashboard"} component={Dashboard} />
-        <Route path={"/login"} component={Login} />
-        <Route path={"/register"} component={Register} />
+        {/* <Route exact path={"/"} component={HomePage} /> */}
+        {/* <Route path={"/dashboard"} component={Dashboard} /> */}
+        <Route exact path={"/login"} component={Login} />
+        <Route exact path={"/register"} component={Register} />
       </Switch>
-    </Router>
+    </div>
   );
-}
+};
 
-const mapStateToProps = state => ({ user: state.user })
+const mapStateToProps = state => ({ user: state.user });
 
-export default connect(mapStateToProps, { logout }(App))
+export default connect(mapStateToProps, { logout })(App);

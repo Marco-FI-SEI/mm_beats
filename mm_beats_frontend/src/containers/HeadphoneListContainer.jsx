@@ -6,11 +6,11 @@ export default class HeadphoneListContainer extends React.Component {
 
     this.state = {
       headphones: []
-    }
+    };
   }
   render() {
     return (
     <div>Hi 2 - {this.props.isLoggedIn}</div>
-    )
-  }
-}
+    );
+  };
+};

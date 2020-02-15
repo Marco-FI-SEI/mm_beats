@@ -1,27 +1,54 @@
-import { AUTH_ACTION_TYPES as authTypes } from "../constants";
+import { AUTH_ACTION_TYPES as authTypes } from "../config/constants";
+import authAPI from "../adapters/authAPI"
 
+// export const login = data => dispatch => {
+//   dispatch({
+//     type: authTypes.USER_LOGGING_IN
+//   });
+
+//   setTimeout(() => {
+//     dispatch({
+//       type: authTypes.USER_LOGGED_IN,
+//       payload: data
+//     });
+//   }, 2000);
+// };
 export const login = data => dispatch => {
-  dispatch({
-    type: authTypes.USER_LOGGING_IN
-  })
+  const {
+    email,
+    password,
+  } = data;
 
-  setTimeout(() => {
-    dispatch({
-      type: authTypes.USER_LOGGED_IN,
-      payload: data
-    })
-  }, 2000)
-}
+  authAPI.login({
+    email,
+    password,
+  });
+};
 
 export function logout() {
   return {
     type: authTypes.USER_LOGGED_OUT
-  }
-}
+  };
+};
 
 export const register = data => dispatch => {
-  dispatch({
-    type: authTypes.USER_REGISTERED,
-    payload: data
+  const {
+    first_name,
+    last_name,
+    username,
+    location,
+    email,
+    password,
+    password_confirmation
+  } = data;
+
+  authAPI.register({
+    first_name,
+    last_name,
+    username,
+    location,
+    email,
+    password,
+    password_confirmation
   })
-}
+};
