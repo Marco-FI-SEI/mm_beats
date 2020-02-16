@@ -10,8 +10,6 @@ import * as serviceWorker from './serviceWorker';
 
 import App from "./App";
 
-const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE || compose;
-
 const rootReducer = combineReducers({
   user: userUpdate,
   form: formReducer
@@ -19,7 +17,10 @@ const rootReducer = combineReducers({
 
 const store = createStore(
   rootReducer,
-  composeEnhancer(applyMiddleware(thunkMiddleware))
+  compose(
+    applyMiddleware(thunkMiddleware),
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+  )
 );
 
 ReactDOM.render(

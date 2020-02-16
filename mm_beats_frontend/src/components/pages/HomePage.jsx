@@ -1,12 +1,10 @@
-import React, { Component } from "react";
-import AuthFormsContainer from "../../containers/AuthFormsContainer";
+import React from "react";
+import "./homepage.css"
 
-export default class HomePage extends Component {
-  render() {
-    return (
-      <div>
-        <AuthFormsContainer />
-      </div>
-    );
-  };
-};
+const HomePage = () => (
+  <div className="homepage">
+
+  </div>
+)
+
+export default HomePage;
